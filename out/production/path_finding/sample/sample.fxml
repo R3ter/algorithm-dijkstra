@@ -10,21 +10,48 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TextArea?>
 <GridPane fx:controller="sample.Controller"
-          xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10">
-    <Button text="waleed" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+          xmlns:fx="http://javafx.com/fxml" alignment="CENTER_LEFT" hgap="10" vgap="10">
 
-<Label text="waleed" textFill="brown" >
-    <font>
-        <Font name="Time New Roman bold" size="20" />
-    </font>
-</Label>
-    <BorderPane style="-fx-background-color: #000000;"
-                xmlns:fx="http://javafx.com/fxml" >
-        <Canvas fx:id="drawArea" height="2000" width="2000"/>
-    </BorderPane>
-    <Canvas fx:id="canvas" width="250" height="500">
+<Label GridPane.rowIndex="5" GridPane.columnIndex="5" text="Abu Dabash algorithm"/>
 
-    </Canvas>
+<ScrollPane GridPane.rowIndex="0" GridPane.columnIndex="0" id="canvas">
+        <Canvas  width="250" height="590" fx:id="canvasChild">
+        </Canvas>
+    </ScrollPane>
+
+    <GridPane GridPane.rowIndex="0" GridPane.columnIndex="5"  >
+    </GridPane>
+
+    <GridPane GridPane.rowIndex="0" GridPane.columnIndex="5" id="tools" >
+
+            <Label GridPane.rowIndex="7" GridPane.columnIndex="0" text="Ending Point"/>
+            <ComboBox GridPane.rowIndex="6" GridPane.columnIndex="0" fx:id="ComboBoxStart">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                    </FXCollections>
+                </items>
+            </ComboBox>
+            <Label text="Starting Point"/>
+            <ComboBox GridPane.rowIndex="8" GridPane.columnIndex="0" fx:id="ComboBoxFinish">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                    </FXCollections>
+                </items>
+            </ComboBox>
+            <TextArea wrapText="true"
+                      fx:id="result" maxWidth="400" GridPane.rowIndex="9" GridPane.columnIndex="0" text="" editable="false"/>
+        <Button text="GO!" GridPane.rowIndex="10" GridPane.columnIndex="0" fx:id="button"/>
+        <Button text="Clear all roads" GridPane.rowIndex="12" GridPane.columnIndex="0" fx:id="clear"/>
+        <Button text="add new city" GridPane.rowIndex="13" GridPane.columnIndex="0" fx:id="addCity"/>
+        <Button text="Clear cities" GridPane.rowIndex="14" GridPane.columnIndex="0" fx:id="clearCities"/>
+        </GridPane>
 
 </GridPane>
