@@ -9,7 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -26,16 +26,7 @@ class Road{
         this.to=to;
     }
 }
-class CityName{
-    float x;
-    float y;
-    String name;
-    CityName(float x,float y,String name){
-        this.name=name;
-        this.x=x;
-        this.y=y;
-    }
-}
+
 class City{
     int id;
     float x;
@@ -58,12 +49,10 @@ public class Main extends Application {
     Scene scene;
     City[] cities;
     TextArea textArea;
-    ArrayList<CityName> newCitiesNames;
     boolean addCityButtonClicked=false;
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        newCitiesNames=new ArrayList();
         primaryStage.setTitle("Dijkstra algorithm");
         cities=new City[]{
                 new City(134,92,"Haifa",0),//1
@@ -99,12 +88,12 @@ public class Main extends Application {
         };
         scene=new Scene(root, 850, 700);
         Canvas canvas =  (Canvas) ((ScrollPane)(scene.lookup("#canvas"))).getContent().lookup("#canvasChild");
-        textArea=((TextArea) ((GridPane)(scene.lookup("#tools"))).lookup("#result"));
+        textArea=((TextArea) ((VBox)(scene.lookup("#tools"))).lookup("#result"));
 
-        Button button =(Button) ((GridPane)(scene.lookup("#tools"))).lookup("#button");
-        Button clearButton =(Button) ((GridPane)(scene.lookup("#tools"))).lookup("#clear");
-        Button addCityButton =(Button) ((GridPane)(scene.lookup("#tools"))).lookup("#addCity");
-        Button clearCitiesButton =(Button) ((GridPane)(scene.lookup("#tools"))).lookup("#clearCities");
+        Button button =(Button) ((VBox )(scene.lookup("#tools"))).lookup("#button");
+        Button clearButton =(Button) ((VBox )(scene.lookup("#tools"))).lookup("#clear");
+        Button addCityButton =(Button) ((VBox )(scene.lookup("#tools"))).lookup("#addCity");
+        Button clearCitiesButton =(Button) ((VBox )(scene.lookup("#tools"))).lookup("#clearCities");
 
         ComboBox comboStart =(ComboBox) scene.lookup("#ComboBoxStart");
         ComboBox comboFinish =(ComboBox) scene.lookup("#ComboBoxFinish");
@@ -145,7 +134,7 @@ public class Main extends Application {
             drawGraphics(cities,canvas);
             ArrayList visitedCities=new ArrayList<CityDistance>();
             CityDistance[] cityDistances=new CityDistance[cities.length];
-            findPath(y,x,cities,null,visitedCities,cityDistances);
+            findPath(y,x,cities,null,visitedCities,cityDistances,canvas);
         });
 
         addCityButton.setOnAction(e->{
@@ -169,8 +158,8 @@ public class Main extends Application {
                 Optional<String> result = dialog.showAndWait();
                 result.ifPresent(s ->{
                     boolean nameExsists=false;
-                    for(CityName name : newCitiesNames){
-                        if(name.name.equals(s)){
+                    for(City city : cities){
+                        if(city.name.equals(s)){
                             setTextArea(true,"Error: you cant use " +
                                     "the same name");
                             nameExsists=true;
@@ -179,7 +168,6 @@ public class Main extends Application {
                     newCities[cities.length]
                         = new City((float) event.getX(), (float) event.getY(), s, cities.length );
                     if(!nameExsists){
-                        newCitiesNames.add(new CityName((float)event.getX()-s.length()-10,(float)event.getY()-5,s));
                         cities=newCities;
                     }
                 });
@@ -234,14 +222,10 @@ public class Main extends Application {
                     float distance2;
                     try{
                         distance2=Float.parseFloat(result.get());
+                        addRoad(clickedCity,new Road(closestCity1,distance2));
                     }catch (Exception e){
-                        distance2=0;
-                        System.out.println("error");
+                        setTextArea(true,"the distance you have entered is invalid");
                     }
-                    final float finalDistance=distance2;
-                    System.out.println(clickedCity.name);
-                    System.out.println(closestCity1.name);
-                    addRoad(clickedCity,new Road(closestCity1,finalDistance));
                 }
                 drawGraphics(cities,canvas);
                 clickedCity=null;
@@ -290,17 +274,16 @@ public class Main extends Application {
     private void drawGraphics(City[] cities,Canvas canvas){
         canvas.getGraphicsContext2D().clearRect(0,0,canvas.getWidth(),canvas.getHeight());
         canvas.getGraphicsContext2D().setFill(Color.BLUE);
-        canvas.getGraphicsContext2D().setStroke(Color.BROWN);
         canvas.getGraphicsContext2D().setLineWidth(1);
         canvas.getGraphicsContext2D().drawImage(new Image("palestine.jpg"),-2,-2);
         for (City city:cities) {
+            canvas.getGraphicsContext2D().setStroke(Color.BLACK);
+            canvas.getGraphicsContext2D().strokeText(city.name,city.x-city.name.length()-10,city.y-5);
+            canvas.getGraphicsContext2D().setStroke(Color.BROWN);
             for (Road road: city.Roads) {
                 canvas.getGraphicsContext2D().strokeLine(city.x, city.y, road.to.x, road.to.y);
             }
             canvas.getGraphicsContext2D().fillOval(city.x-5, city.y-5,10,10);
-        }
-        for (CityName name:newCitiesNames){
-            canvas.getGraphicsContext2D().fillText(name.name,name.x,name.y);
         }
     }
     public void addRoad(City city, Road road){
@@ -361,7 +344,7 @@ public class Main extends Application {
     }
 
     public void findPath(int from, int to, City[] cities, City currentPoint
-            , ArrayList<City> visitedCities, CityDistance[] cityDistances){
+            , ArrayList<City> visitedCities, CityDistance[] cityDistances,Canvas canvas){
 
         if(to==from){
             setTextArea(true,"Error: Starting point is the same as ending point");
@@ -409,15 +392,13 @@ public class Main extends Application {
             }
         }
         if(cities[to]==currentPoint){
-            Canvas canvas =  (Canvas) ((ScrollPane)(scene.lookup("#canvas")))
-                    .getContent().lookup("#canvasChild");
-            canvas.getGraphicsContext2D().setStroke(Color.GREEN);
-            canvas.getGraphicsContext2D().setLineWidth(5);
 
             int x=0;
             for(City city :cityDistances[currentPoint.id].passCities){
                 x++;
                 if(cityDistances[currentPoint.id].passCities.length>x) {
+                    canvas.getGraphicsContext2D().setStroke(Color.GREEN);
+                    canvas.getGraphicsContext2D().setLineWidth(5);
                     canvas.getGraphicsContext2D().strokeLine(city.x, city.y,
                             cityDistances[currentPoint.id].passCities[x].x,
                             cityDistances[currentPoint.id].passCities[x].y);
@@ -457,7 +438,7 @@ public class Main extends Application {
             setTextArea(true,"Error: no path was found");
             return;
         }
-        findPath(from,to,cities,closestCity,visitedCities,cityDistances);
+        findPath(from,to,cities,closestCity,visitedCities,cityDistances,canvas);
     }
     public static void main(String[] args) {
         launch(args);

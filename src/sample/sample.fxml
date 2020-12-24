@@ -17,6 +17,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.VBox?>
 <GridPane fx:controller="sample.Controller"
           xmlns:fx="http://javafx.com/fxml" alignment="CENTER_LEFT" hgap="10" vgap="10">
 
@@ -30,7 +31,7 @@
     <GridPane GridPane.rowIndex="0" GridPane.columnIndex="5"  >
     </GridPane>
 
-    <GridPane GridPane.rowIndex="0" GridPane.columnIndex="5" id="tools" >
+    <VBox GridPane.rowIndex="0" GridPane.columnIndex="5" id="tools" >
 
             <Label GridPane.rowIndex="7" GridPane.columnIndex="0" text="Ending Point"/>
             <ComboBox GridPane.rowIndex="6" GridPane.columnIndex="0" fx:id="ComboBoxStart">
@@ -48,10 +49,12 @@
             </ComboBox>
             <TextArea wrapText="true"
                       fx:id="result" maxWidth="400" GridPane.rowIndex="9" GridPane.columnIndex="0" editable="false"/>
-        <Button text="GO!" GridPane.rowIndex="10" GridPane.columnIndex="0" fx:id="button"/>
+        <Button text="GO!" GridPane.rowIndex="10" GridPane.columnIndex="0" minWidth="100"
+                minHeight="50" alignment="CENTER" fx:id="button"/>
+        <Label GridPane.rowIndex="11" GridPane.columnIndex="0" minHeight="10" />
         <Button text="Clear all roads" GridPane.rowIndex="12" GridPane.columnIndex="0" fx:id="clear"/>
         <Button text="add new city" GridPane.rowIndex="13" GridPane.columnIndex="0" fx:id="addCity"/>
         <Button text="Clear cities" GridPane.rowIndex="14" GridPane.columnIndex="0" fx:id="clearCities"/>
-        </GridPane>
+        </VBox >
 
 </GridPane>
