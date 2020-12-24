@@ -223,11 +223,11 @@ public class Main extends Application {
                     try{
                         distance2=Float.parseFloat(result.get());
                         addRoad(clickedCity,new Road(closestCity1,distance2));
+                        drawGraphics(cities,canvas);
                     }catch (Exception e){
                         setTextArea(true,"the distance you have entered is invalid");
                     }
                 }
-                drawGraphics(cities,canvas);
                 clickedCity=null;
             }
         });
@@ -406,6 +406,8 @@ public class Main extends Application {
 
             }
 
+            canvas.getGraphicsContext2D().setStroke(Color.GREEN);
+            canvas.getGraphicsContext2D().setLineWidth(5);
             canvas.getGraphicsContext2D().strokeLine(cityDistances[currentPoint.id]
                             .passCities[cityDistances[currentPoint.id]
                             .passCities.length-1].x,

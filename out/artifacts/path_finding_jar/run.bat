@@ -1,0 +1,1 @@
+java --module-path C:\Users\walee\Documents\javafx-sdk-11.0.2\lib --add-modules javafx.fxml,javafx.controls -jar C:\Users\walee\IdeaProjects\path_finding\out\artifacts\path_finding_jar\path_finding.jar

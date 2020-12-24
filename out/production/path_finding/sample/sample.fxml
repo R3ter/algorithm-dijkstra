@@ -21,7 +21,7 @@
 <GridPane fx:controller="sample.Controller"
           xmlns:fx="http://javafx.com/fxml" alignment="CENTER_LEFT" hgap="10" vgap="10">
 
-<Label GridPane.rowIndex="5" GridPane.columnIndex="5" text="Grinning Trout's algorithm"/>
+<Label GridPane.rowIndex="5" GridPane.columnIndex="5" text="Abo Dabash's algorithm"/>
 
 <ScrollPane GridPane.rowIndex="0" GridPane.columnIndex="0" id="canvas">
         <Canvas  width="250" height="590" fx:id="canvasChild">
