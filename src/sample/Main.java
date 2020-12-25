@@ -1,6 +1,8 @@
 package sample;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -49,6 +51,7 @@ public class Main extends Application {
     Scene scene;
     City[] cities;
     TextArea textArea;
+    boolean showNames=true;
     boolean addCityButtonClicked=false;
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -94,9 +97,18 @@ public class Main extends Application {
         Button clearButton =(Button) ((VBox )(scene.lookup("#tools"))).lookup("#clear");
         Button addCityButton =(Button) ((VBox )(scene.lookup("#tools"))).lookup("#addCity");
         Button clearCitiesButton =(Button) ((VBox )(scene.lookup("#tools"))).lookup("#clearCities");
+        CheckBox checkBox =(CheckBox) ((VBox )(scene.lookup("#tools"))).lookup("#checkBox");
 
         ComboBox comboStart =(ComboBox) scene.lookup("#ComboBoxStart");
         ComboBox comboFinish =(ComboBox) scene.lookup("#ComboBoxFinish");
+        checkBox.setSelected(true);
+        checkBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                showNames=newValue;
+                drawGraphics(cities,canvas);
+            }
+        });
 
         setDropListData(comboStart,comboFinish);
 
@@ -207,7 +219,7 @@ public class Main extends Application {
                         closestCity1 = city;
                     }
                 }
-                if(closestCity1==null){
+                if(closestCity1==null||clickedCity==closestCity1){
                     drawGraphics(cities,canvas);
                     clickedCity=null;
                     return;
@@ -277,8 +289,10 @@ public class Main extends Application {
         canvas.getGraphicsContext2D().setLineWidth(1);
         canvas.getGraphicsContext2D().drawImage(new Image("palestine.jpg"),-2,-2);
         for (City city:cities) {
-            canvas.getGraphicsContext2D().setStroke(Color.BLACK);
-            canvas.getGraphicsContext2D().strokeText(city.name,city.x-city.name.length()-10,city.y-5);
+            if(showNames){
+                canvas.getGraphicsContext2D().setStroke(Color.BLACK);
+                canvas.getGraphicsContext2D().strokeText(city.name,city.x-city.name.length()-10,city.y-7);
+            }
             canvas.getGraphicsContext2D().setStroke(Color.BROWN);
             for (Road road: city.Roads) {
                 canvas.getGraphicsContext2D().strokeLine(city.x, city.y, road.to.x, road.to.y);
@@ -440,6 +454,7 @@ public class Main extends Application {
             setTextArea(true,"Error: no path was found");
             return;
         }
+
         findPath(from,to,cities,closestCity,visitedCities,cityDistances,canvas);
     }
     public static void main(String[] args) {

@@ -18,6 +18,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.CheckBox?>
 <GridPane fx:controller="sample.Controller"
           xmlns:fx="http://javafx.com/fxml" alignment="CENTER_LEFT" hgap="10" vgap="10">
 
@@ -55,6 +56,7 @@
         <Button text="Clear all roads" GridPane.rowIndex="12" GridPane.columnIndex="0" fx:id="clear"/>
         <Button text="add new city" GridPane.rowIndex="13" GridPane.columnIndex="0" fx:id="addCity"/>
         <Button text="Clear cities" GridPane.rowIndex="14" GridPane.columnIndex="0" fx:id="clearCities"/>
+        <CheckBox  fx:id="checkBox">Hide cities names</CheckBox>
         </VBox >
 
 </GridPane>
