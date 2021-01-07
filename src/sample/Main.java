@@ -23,7 +23,6 @@ class Road{
     City from;
     Float distance;
     Road(City to,Float distance){
-
         this.distance=distance;
         this.to=to;
     }
@@ -35,6 +34,7 @@ class City{
     float y;
     String name;
     ArrayList<Road> Roads;
+
     public void AddRoad(Road road){
         Roads.add(road);
     }
@@ -49,6 +49,8 @@ class City{
 public class Main extends Application {
     City clickedCity;
     Scene scene;
+    boolean pick1=false;
+    boolean pick2=false;
     City[] cities;
     TextArea textArea;
     boolean showNames=true;
@@ -97,6 +99,8 @@ public class Main extends Application {
         Button clearButton =(Button) ((VBox )(scene.lookup("#tools"))).lookup("#clear");
         Button addCityButton =(Button) ((VBox )(scene.lookup("#tools"))).lookup("#addCity");
         Button clearCitiesButton =(Button) ((VBox )(scene.lookup("#tools"))).lookup("#clearCities");
+        Button pick1button =(Button) ((VBox )(scene.lookup("#tools"))).lookup("#pick1");
+        Button pick2button =(Button) ((VBox )(scene.lookup("#tools"))).lookup("#pick2");
         CheckBox checkBox =(CheckBox) ((VBox )(scene.lookup("#tools"))).lookup("#checkBox");
 
         ComboBox comboStart =(ComboBox) scene.lookup("#ComboBoxStart");
@@ -108,6 +112,16 @@ public class Main extends Application {
                 showNames=newValue;
                 drawGraphics(cities,canvas);
             }
+        });
+        pick1button.setOnAction(e->{
+            pick1=true;
+            pick2=false;
+            setTextArea(false,"select starting point");
+        });
+        pick2button.setOnAction(e->{
+            pick2=true;
+            pick1=false;
+            setTextArea(false,"select target point");
         });
 
         setDropListData(comboStart,comboFinish);
@@ -202,6 +216,18 @@ public class Main extends Application {
                 }
                 if(closestCity==null) return;
 
+                if(pick1){
+                    comboStart.setValue(closestCity.name);
+                    pick2=false;
+                    pick1=false;
+                    return;
+                }else if(pick2){
+                    comboFinish.setValue(closestCity.name);
+                    pick2=false;
+                    pick1=false;
+                    return;
+                }
+
                 System.out.println(closestCity.name);
                 System.out.println(closestCity.id);
 
@@ -235,6 +261,7 @@ public class Main extends Application {
                     try{
                         distance2=Float.parseFloat(result.get());
                         addRoad(clickedCity,new Road(closestCity1,distance2));
+                        System.out.println("addRoad("+clickedCity.name+",new Road("+closestCity1.name+","+distance2+"));");
                         drawGraphics(cities,canvas);
                     }catch (Exception e){
                         setTextArea(true,"the distance you have entered is invalid");
@@ -252,17 +279,9 @@ public class Main extends Application {
             canvas.getGraphicsContext2D().strokeLine(clickedCity.x, clickedCity.y, moveEvent.getX(), moveEvent.getY());
         });
 
-
-
-
-
-
         setRoads(cities);
 
-
         drawGraphics(cities,canvas);
-
-
 
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -325,7 +344,6 @@ public class Main extends Application {
         addRoad(cities[5],new Road(cities[1],90f));
         addRoad(cities[5],new Road(cities[0],100f));
         addRoad(cities[8],new Road(cities[13],150f));
-//        addRoad(cities[11],new Road(cities[9],300f));
         addRoad(cities[5],new Road(cities[3],70f));
         addRoad(cities[16],new Road(cities[17],150f));
         addRoad(cities[22],new Road(cities[17],320f));
@@ -343,7 +361,6 @@ public class Main extends Application {
         addRoad(cities[9],new Road(cities[29],90f));
         addRoad(cities[10],new Road(cities[29],110f));
         addRoad(cities[11],new Road(cities[29],110f));
-
 
     }
     class CityDistance {
@@ -439,22 +456,17 @@ public class Main extends Application {
 
                 VistedCities=VistedCities+" -> "+cityDistances[currentPoint.id].passCities[i].name;
 
-//                System.out.println(city.name);
-//                System.out.println(city.id);
-//                System.out.println(cityDistances[city.id].distance);
             }
             setTextArea(false,VistedCities+"\n\n\n\n" +
                     "dictance="+cityDistances[to].distance);
             System.out.println(cityDistances[to].distance);
             System.out.println("*************************");
             return;
-
         }
         if(closestCity==null) {
             setTextArea(true,"Error: no path was found");
             return;
         }
-
         findPath(from,to,cities,closestCity,visitedCities,cityDistances,canvas);
     }
     public static void main(String[] args) {

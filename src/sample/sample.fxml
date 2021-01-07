@@ -41,14 +41,18 @@
                     </FXCollections>
                 </items>
             </ComboBox>
-            <Label text="Starting Point"/>
+        <Button text="pick" GridPane.rowIndex="12" GridPane.columnIndex="0" fx:id="pick1"/>
+
+        <Label text="Starting Point"/>
             <ComboBox GridPane.rowIndex="8" GridPane.columnIndex="0" fx:id="ComboBoxFinish">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
                     </FXCollections>
                 </items>
             </ComboBox>
-            <TextArea wrapText="true"
+        <Button text="pick" GridPane.rowIndex="12" GridPane.columnIndex="0" fx:id="pick2"/>
+
+        <TextArea wrapText="true"
                       fx:id="result" maxWidth="400" GridPane.rowIndex="9" GridPane.columnIndex="0" editable="false"/>
         <Button text="GO!" GridPane.rowIndex="10" GridPane.columnIndex="0" minWidth="100"
                 minHeight="50" alignment="CENTER" fx:id="button"/>
